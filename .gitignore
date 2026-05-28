@@ -1,7 +1,6 @@
 .env.local
 node_modules/
 fixtures/
-output/
 .wrangler/
 .dev.vars
 .DS_Store

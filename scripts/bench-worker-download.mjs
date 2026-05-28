@@ -13,7 +13,7 @@ dotenv.config({ path: path.join(rootDir, ".env.local") });
 const args = parseArgs(process.argv.slice(2));
 const targets = createTargets();
 const startedAt = new Date();
-const runId = `vendor-comparison-worker-download-${startedAt.toISOString().replace(/[:.]/g, "-")}`;
+const runId = `railway-worker-download-${startedAt.toISOString().replace(/[:.]/g, "-")}`;
 const tempDir = path.join(rootDir, "temp", runId);
 const fixtureSizesMb = parseList(args.fixtureSizesMb || "1,25,50,100");
 if (fixtureSizesMb.length === 0) {
@@ -40,7 +40,7 @@ await mkdir(outputDir, { recursive: true });
 
 const fileCases = await createSyntheticFixtures({ fixtureSizesMb, fixtureDir: tempDir });
 
-console.log("Railway Object Storage vs Cloudflare R2 / Cloudflare Worker download benchmark");
+console.log("Railway Object Storage / Worker download benchmark");
 console.log(`Files: ${fileCases.map((fileCase) => `${fileCase.fileName} (${formatBytes(fileCase.fileSizeBytes)})`).join(", ")}`);
 console.log(`Providers: ${targets.map((target) => `${target.name} (${target.bucket})`).join(", ")}`);
 console.log(`Worker URL: ${workerUrl}`);
@@ -159,7 +159,7 @@ async function writeSyntheticFile({ filePath, fileSizeBytes }) {
 }
 
 function getObjectKey({ target, fileCase }) {
-  return `benchmark/cloudflare-worker/${target.slug}/${runId}/${fileCase.fileName}`;
+  return `benchmark/worker-download/${target.slug}/${runId}/${fileCase.fileName}`;
 }
 
 async function uploadObject({ target, fileCase, objectKey }) {
@@ -412,7 +412,7 @@ function renderHtmlReport(report) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Vendor comparison - ${escapeHtml(report.runId)}</title>
+  <title>Railway benchmark - ${escapeHtml(report.runId)}</title>
   <style>
     :root {
       color-scheme: light;
@@ -422,7 +422,6 @@ function renderHtmlReport(report) {
       --muted: #5f6b7a;
       --line: #d9dee7;
       --railway: #7c3aed;
-      --cloudflare: #f38020;
       --bad: #b42318;
       --good: #067647;
     }
@@ -434,9 +433,10 @@ function renderHtmlReport(report) {
       font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     header, main { max-width: 1240px; margin: 0 auto; padding: 24px; }
-    header { padding-top: 32px; }
+    header { padding-top: 32px; padding-bottom: 8px; }
+    main { padding-top: 0; }
     h1 { margin: 0 0 8px; font-size: 28px; line-height: 1.15; }
-    h2 { margin: 32px 0 12px; font-size: 20px; }
+    h2 { margin: 12px 0 12px; font-size: 20px; }
     h3 { margin: 24px 0 10px; font-size: 16px; }
     p { color: var(--muted); margin: 0 0 12px; }
     .table-wrap {
@@ -458,7 +458,6 @@ function renderHtmlReport(report) {
     .legend { display: flex; gap: 14px; align-items: center; margin: -4px 0 10px; color: var(--muted); font-size: 12px; }
     .legend-item { display: inline-flex; gap: 6px; align-items: center; }
     .swatch { display: inline-block; width: 18px; height: 3px; border-radius: 999px; background: var(--railway); }
-    .swatch.cloudflare-r2 { background: var(--cloudflare); }
     .chart {
       width: 100%;
       height: auto;
@@ -470,20 +469,15 @@ function renderHtmlReport(report) {
     }
     .axis, .grid { stroke: var(--line); stroke-width: 1; }
     .series { fill: none; stroke: var(--railway); stroke-width: 2.5; }
-    .series.cloudflare-r2 { stroke: var(--cloudflare); }
     .point { fill: var(--railway); stroke: #ffffff; stroke-width: 1.5; }
-    .point.cloudflare-r2 { fill: var(--cloudflare); }
     .tick { fill: var(--muted); font-size: 11px; }
     .chart-label { fill: var(--text); font-size: 12px; font-weight: 650; }
   </style>
 </head>
 <body>
   <header>
-    <h1>Object Storage Vendor Comparison</h1>
+    <h1>Railway Object Storage Benchmark</h1>
     <p>Generated ${escapeHtml(formatCreatedAt(report.createdAt))}. Each chart compares per-file download speed as concurrency increases.</p>
-    <div class="meta">
-      ${report.targets.map((target) => `<span class="pill">${escapeHtml(target.name)}</span>`).join("")}
-    </div>
   </header>
   <main>
     <section>
@@ -554,15 +548,13 @@ function renderSpeedChart({ summaries, targets }) {
       const path = targetPoints.map((point) => `${xScale(point.concurrency)},${yScale(point.value)}`).join(" ");
       return `<polyline class="series ${escapeHtml(target.slug)}" points="${path}"></polyline>
         ${targetPoints.map((point) => `<circle class="point ${escapeHtml(target.slug)}" cx="${xScale(point.concurrency)}" cy="${yScale(point.value)}" r="4">
-          <title>${escapeHtml(point.providerName)} concurrency ${point.concurrency}: ${formatNumber(point.value)} MB/s per file</title>
+          <title>Concurrency ${point.concurrency}: ${formatNumber(point.value)} MB/s per file</title>
         </circle>`).join("")}`;
     }).join("")}
     <text class="tick" x="${margin.left + plotWidth / 2}" y="${height - 6}" text-anchor="middle">Concurrency</text>
     <text class="tick" x="16" y="${margin.top + plotHeight / 2}" text-anchor="middle" transform="rotate(-90 16 ${margin.top + plotHeight / 2})">Per-file MB/s</text>
   </svg>
-  <div class="legend">
-    ${targets.map((target) => `<span class="legend-item"><span class="swatch ${escapeHtml(target.slug)}"></span>${escapeHtml(target.name)}</span>`).join("")}
-  </div>`;
+  `;
 }
 
 function renderSummaryTable({ summaries, targets }) {
@@ -572,10 +564,7 @@ function renderSummaryTable({ summaries, targets }) {
     <table>
       <thead>
         <tr>
-          <th rowspan="2">Concurrency</th>
-          ${targets.map((target) => `<th colspan="6">${escapeHtml(target.name)}</th>`).join("")}
-        </tr>
-        <tr>
+          <th>Concurrency</th>
           ${targets.map(() => `
             <th>Errors</th>
             <th>P50</th>
@@ -739,11 +728,6 @@ function createTargets() {
       name: "Railway Object Storage",
       slug: "railway",
       envPrefix: "RAILWAY_S3",
-    }),
-    createTarget({
-      name: "Cloudflare R2",
-      slug: "cloudflare-r2",
-      envPrefix: "CLOUDFLARE_R2",
     }),
   ];
 }
