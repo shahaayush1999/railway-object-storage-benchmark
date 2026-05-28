@@ -1,0 +1,17 @@
+{
+  "name": "railway-object-storage-benchmark",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "bench": "node scripts/bench-worker-download.mjs"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.830.0",
+    "@aws-sdk/s3-request-presigner": "^3.1053.0",
+    "dotenv": "^16.5.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.20.0"
+  }
+}
