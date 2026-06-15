@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Railway Amsterdam benchmark - railway-worker-download-2026-06-15T08-21-48-383Z</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --text: #17202a;
+      --muted: #5f6b7a;
+      --line: #d9dee7;
+      --railway: #7c3aed;
+      --bad: #b42318;
+      --good: #067647;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    header, main { max-width: 1240px; margin: 0 auto; padding: 24px; }
+    header { padding-top: 32px; padding-bottom: 8px; }
+    main { padding-top: 0; }
+    h1 { margin: 0 0 8px; font-size: 28px; line-height: 1.15; }
+    h2 { margin: 12px 0 12px; font-size: 20px; }
+    h3 { margin: 24px 0 10px; font-size: 16px; }
+    p { color: var(--muted); margin: 0 0 12px; }
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    table { width: 100%; border-collapse: collapse; min-width: 920px; }
+    th, td { padding: 9px 10px; border: 1px solid var(--line); text-align: right; white-space: nowrap; }
+    th:first-child, td:first-child { text-align: center; }
+    th { font-size: 12px; color: var(--muted); background: #fbfcfe; position: sticky; top: 0; }
+    thead tr:first-child th { text-align: center; }
+    .ok { color: var(--good); font-weight: 650; }
+    .err { color: var(--bad); font-weight: 650; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .pill { border: 1px solid var(--line); border-radius: 999px; background: var(--panel); padding: 6px 10px; color: var(--muted); }
+    .legend { display: flex; gap: 14px; align-items: center; margin: -4px 0 10px; color: var(--muted); font-size: 12px; }
+    .legend-item { display: inline-flex; gap: 6px; align-items: center; }
+    .swatch { display: inline-block; width: 18px; height: 3px; border-radius: 999px; background: var(--railway); }
+    .chart {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 0 12px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .axis, .grid { stroke: var(--line); stroke-width: 1; }
+    .series { fill: none; stroke: var(--railway); stroke-width: 2.5; }
+    .point { fill: var(--railway); stroke: #ffffff; stroke-width: 1.5; }
+    .tick { fill: var(--muted); font-size: 11px; }
+    .chart-label { fill: var(--text); font-size: 12px; font-weight: 650; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Railway Amsterdam Object Storage Benchmark</h1>
+    <p>Generated Jun 15, 2026, 01:51 PM. Each chart compares per-file download speed as concurrency increases.</p>
+  </header>
+  <main>
+    <section>
+      <h2>Summary By File Size</h2>
+      
+        <h3>1 MB file</h3>
+        <svg class="chart" viewBox="0 0 920 300" role="img" aria-label="Per-file MB/s by concurrency">
+    <text x="64" y="18" class="chart-label">Per-file MB/s by concurrency</text>
+    <line class="grid" x1="64" x2="892" y1="248" y2="248"></line>
+        <text class="tick" x="54" y="252" text-anchor="end">0</text><line class="grid" x1="64" x2="892" y1="193" y2="193"></line>
+        <text class="tick" x="54" y="197" text-anchor="end">0.35</text><line class="grid" x1="64" x2="892" y1="138" y2="138"></line>
+        <text class="tick" x="54" y="142" text-anchor="end">0.69</text><line class="grid" x1="64" x2="892" y1="83.00000000000003" y2="83.00000000000003"></line>
+        <text class="tick" x="54" y="87.00000000000003" text-anchor="end">1.04</text><line class="grid" x1="64" x2="892" y1="28" y2="28"></line>
+        <text class="tick" x="54" y="32" text-anchor="end">1.38</text>
+    <line class="axis" x1="64" x2="892" y1="248" y2="248"></line>
+    <line class="axis" x1="64" x2="64" y1="28" y2="248"></line>
+    <line class="grid" x1="478" x2="478" y1="28" y2="248"></line>
+        <text class="tick" x="478" y="276" text-anchor="middle">1</text>
+    <polyline class="series railway" points="478,44.29629629629633"></polyline>
+        <circle class="point railway" cx="478" cy="44.29629629629633" r="4">
+          <title>Concurrency 1: 1.278 MB/s per file</title>
+        </circle>
+    <text class="tick" x="478" y="294" text-anchor="middle">Concurrency</text>
+    <text class="tick" x="16" y="138" text-anchor="middle" transform="rotate(-90 16 138)">Per-file MB/s</text>
+  </svg>
+  
+        <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Concurrency</th>
+          
+            <th>Errors</th>
+            <th>P50</th>
+            <th>P95</th>
+            <th>P99</th>
+            <th>Max</th>
+            <th>MB/s</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        
+          <tr>
+            <td>1</td>
+            
+    <td class="">0</td>
+    <td>379ms</td>
+    <td>379ms</td>
+    <td>379ms</td>
+    <td>379ms</td>
+    <td>1.278</td>
+  
+          </tr>
+        
+      </tbody>
+    </table>
+  </div>
+      
+    </section>
+  </main>
+</body>
+</html>

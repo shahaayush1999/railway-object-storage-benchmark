@@ -802,6 +802,12 @@ function parseArgs(argv) {
       continue;
     }
 
+    if (arg === "--fixtureSizesMb") {
+      parsed.fixtureSizesMb = argv[index + 1] || "";
+      index += 1;
+      continue;
+    }
+
     if (arg.startsWith("--fixture-sizes-mb=")) {
       parsed.fixtureSizesMb = arg.slice("--fixture-sizes-mb=".length);
       continue;
@@ -809,6 +815,11 @@ function parseArgs(argv) {
 
     if (arg.startsWith("--fixture-sizes=")) {
       parsed.fixtureSizesMb = arg.slice("--fixture-sizes=".length);
+      continue;
+    }
+
+    if (arg.startsWith("--fixtureSizesMb=")) {
+      parsed.fixtureSizesMb = arg.slice("--fixtureSizesMb=".length);
       continue;
     }
 
