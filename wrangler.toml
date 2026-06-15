@@ -3,4 +3,4 @@ main = "worker/src/index.js"
 compatibility_date = "2026-05-27"
 
 [placement]
-region = "azure:westeurope"
+region = "aws:us-east-1"
